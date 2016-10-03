@@ -1,0 +1,15 @@
+# depslib dependency file v1.0
+1475470273 source:c:\projects\cps633-lab1\main.c
+	<stdlib.h>
+	<stdio.h>
+	"olmHash.h"
+
+1475379081 c:\projects\cps633-lab1\olmhash.h
+
+1475472116 source:c:\projects\cps633-lab1\olmhash.c
+	"olmhash.h"
+	<stdlib.h>
+	<stdio.h>
+	<string.h>
+	<ctype.h>
+
