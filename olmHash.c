@@ -19,12 +19,12 @@ int olmHash(void){
     }
 
     int searchName = searchData(input, users);
-    if(-1){
+    if(searchName == -1){
         char * pass = getPassword();
         char * hash = getHash(4, pass);
 
         strcpy(&users[userCount], input);
-        //writeFile(userCount, users, passes);
+        writeFile(userCount, users, passes);
         strcpy(&passes[userCount], hash);
         writeFile(userCount, users, passes);
         userCount--;
@@ -116,7 +116,7 @@ int writeFile(int count, char users[MAX_USERS], char passes[MAX_USERS]){
     while(count > -1){
         puts("done\n");
         fwrite(&users[userCount], sizeof(char), sizeof(strlen(users[userCount]))+1, fp);
-        fwrite(&newLine, sizeof(char), 2, fp);
+        fwrite(&newLine, sizeof(char), 2b, fp);
         fwrite(&passes[count], sizeof(char), sizeof(strlen(passes[count]))+1, fp);
         fwrite(&newLine, sizeof(char), 2, fp);
         count--;
@@ -125,10 +125,11 @@ int writeFile(int count, char users[MAX_USERS], char passes[MAX_USERS]){
     return 0;
 }
 //searches for username in table
-int searchData(const char * s, char users[MAX_USERS]){
+int searchData(const char * s, char usernames[MAX_USERS]){
     int i;
+
     for(i = 0; i < MAX_USERS; i++){
-        if(stricmp(s,users[i]) == 0){
+        if(stricmp(&s,&usernames[i]) == 0){
             puts("Username found");
             return i;
         } else {
@@ -138,6 +139,15 @@ int searchData(const char * s, char users[MAX_USERS]){
     }
 }
 
+int searchFile(char usernames[MAX_USERS],char passwords[MAX_USERS]){
+    FILE * fp;
+	char line[20];
+	char newLine = '\n';
+	//attempt to open file
+	fp = fopen("data.txt", "rt");
+
+	int count = 0;
+}
 // DES replacement cipher
 // The function E takes 4 bytes from *in as input and
 // writes 4 bytes to *out

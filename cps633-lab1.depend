@@ -13,3 +13,17 @@
 	<string.h>
 	<ctype.h>
 
+1475461932 source:c:\cps633-lab1-master\main.c
+	<stdlib.h>
+	<stdio.h>
+	"olmHash.h"
+
+1475461932 c:\cps633-lab1-master\olmhash.h
+
+1475514790 source:c:\cps633-lab1-master\olmhash.c
+	"olmhash.h"
+	<stdlib.h>
+	<stdio.h>
+	<string.h>
+	<ctype.h>
+
