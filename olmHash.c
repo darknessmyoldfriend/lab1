@@ -1,4 +1,4 @@
-#include "olmhash.h"
+#include "olmHash.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -9,30 +9,42 @@ char passes[MAX_USERS][MAX_PASS_LENGTH];
 int userCount = 0;
 
 int olmHash(void){
-    strcpy(users[0],"sdfdsfgdsfg");
-    strcpy(users[1],"sdfsdftartsh");
-    writeFile(users);
+    char * temp = getUserID();
+    int in = searchFile(temp,users);
+
+    //if not found, return -1.
+    if(in != 0){
+        printf("%i\n", in);
+        puts("cool!\n");
+    } else {
+        printf("%i\n", in);
+        puts("not cool! save it to file\n");
+        strcpy(users[userCount],temp);
+        writeFile(userCount,users);
+        puts("file saved!\n");
+        return -1;
+    }
     return 0;
 }
 
-int writeFile(char array[MAX_USERS][MAX_USER_LENGTH]){
-    FILE *f = fopen("data.txt", "wb");
-    fwrite(array, sizeof(char), sizeof(array), f);
+int writeFile(int i, char array[MAX_USERS][MAX_USER_LENGTH]){
+    FILE *f = fopen("data.txt", "ab");
+    fwrite(array[i], sizeof(char), sizeof(array[i]), f);
+    fprintf(f, "\n");
     fclose(f);
     return 0;
 }
 
-int readFile(char array[MAX_USERS][MAX_USER_LENGTH]){
-    FILE *f = fopen("data.txt", "rb");
-    fread(array, sizeof(char), sizeof(array), f);
-    return 0;
-}
+//int readFile(char array[MAX_USERS][MAX_USER_LENGTH]){
+//    FILE *f = fopen("data.txt", "rb");
+//    fread(array, sizeof(char), sizeof(array), f);
+//    return 0;
+//}
 //searches for username in table
-int searchUser(const char * s, char array[MAX_USERS][MAX_USER_LENGTH]){
+int searchUser(const char * c, char array[MAX_USERS][MAX_USER_LENGTH]){
     int i;
-
     for(i = 0; i < MAX_USERS; i++){
-        if(stricmp(s,array[i]) == 0){
+        if(stricmp(c,array[i]) == 0){
             puts("Username found");
             return i;
         } else {
@@ -43,17 +55,26 @@ int searchUser(const char * s, char array[MAX_USERS][MAX_USER_LENGTH]){
     return 0;
 }
 
-int searchFile(const char * c, char array[MAX_USERS][MAX_USER_LENGTH]){
+int searchFile(char * c, char array[MAX_USERS][MAX_USER_LENGTH]){
+    FILE *fp;
+    fp = fopen("data.txt", "rb");
+    while(fgets(c, sizeof(array), fp) != NULL){
+        puts("found!\n");
+        return -1;
+    }
+    /*
     const char * temp = array;
 
-    if( (strstr(c, temp)) == NULL){
+    if((strstr(c, temp)) == NULL){
         printf("Not found!\n");
         return -1;
     } else {
         printf("Found!");
         return 0;
     }
-return 0;
+    */
+    puts("not found!\n");
+    return 0;
 }
 // DES replacement cipher
 // The function E takes 4 bytes from *in as input and
