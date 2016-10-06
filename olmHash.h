@@ -15,4 +15,12 @@ char * getPassword(void);
 
 char * getHash(int x, char * pass);
 
-int searchData(const char * s, char users[MAX_USERS]);
+int readFile(char array[MAX_USERS][MAX_USER_LENGTH]);
+
+int writeFile(char array[MAX_USERS][MAX_USER_LENGTH]);
+
+int searchUser(const char * s, char usernames[MAX_USERS][MAX_USER_LENGTH]);
+
+int searchFile(const char * c, char array[MAX_USERS][MAX_USER_LENGTH]);
+
+void E(char *in, char *out);
