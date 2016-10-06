@@ -4,131 +4,35 @@
 #include <string.h>
 #include <ctype.h>
 
-char users[MAX_USERS];
-char passes[MAX_USERS];
+char users[MAX_USERS][MAX_USER_LENGTH];
+char passes[MAX_USERS][MAX_PASS_LENGTH];
 int userCount = 0;
 
 int olmHash(void){
-    int attempts;
-    attempts = 0;
-
-    char * input = 0;
-    while(input == 0){
-        input = getUserID();
-        printf("%s\n", input);
-    }
-
-    int searchName = searchData(input, users);
-    if(-1){
-        char * pass = getPassword();
-        char * hash = getHash(4, pass);
-
-        strcpy(&users[userCount], input);
-        //writeFile(userCount, users, passes);
-        strcpy(&passes[userCount], hash);
-        writeFile(userCount, users, passes);
-        userCount--;
-    } else {
-        while(attempts < ATTEMPT_MAX){
-        printf("Hello %s", input);
-        char * pass = getPassword();
-        char * hash = getHash(3, pass);
-        int checkPass = strcmp(hash, passes[userCount]);
-            if(checkPass == 0){
-                attempts = 0;
-                puts("Authenticated. Enter new password:\n");
-                char * newPass = getPassword();
-                char * newHash = getHash(3, newPass);
-                strcpy(passes[userCount], hash);
-                puts("Password updated.\n");
-                break;
-            }
-            puts("Incorrect. Please try again. Max 4 attempts.\n");
-            attempts++;
-        }
-        if(attempts >= ATTEMPT_MAX){
-            puts("You have been locked out!\n");
-        }
-    }
-
-        /*
-        char * fail = "fail";
-        getPassword();
-        while((getPassword() == fail) && (attempts < ATTEMPT_MAX)){
-            getPassword();
-            attempts++;
-        }
-
-        if(attempts == ATTEMPT_MAX){
-            puts("You have been locked out!\n");
-            return 0;
-        }
-        /*
-        getPassword();
-        if("fail"){
-            attempts++;
-            getPassword();
-        } else {
-            puts("You have been locked out!");
-            return 0;
-        }
-        */
-
-
-        return 0;
+    strcpy(users[0],"sdfdsfgdsfg");
+    strcpy(users[1],"sdfsdftartsh");
+    writeFile(users);
+    return 0;
 }
-/*
-		printf("Enter a new password: /n");
-		scanf(%c, password); // the program asks the user to enter a new password
-		getHash(password); // The hash of the password is then computed and added to the table alongside the user id
-		break;
-		} else if (search(user_id)){ //If the user id already exists in the table
-		printf("Enter your password: /n");
-		scanf(%c, password); // the program asks the user to enter their old password
-		getHash(password); //The hash of the entered password is computed and
-							//compared to the hash of the user’s old password stored in the table
-		search(password); //If the hashes match
-		printf("Enter a new password: /n");
-		scanf(%c, password); // the program asks the user to enter a new password
-		getHash(password); // The hash of the password is then computed and added to the table alongside the user id
-		break;
-		}
 
-	printf("Too many unsuccessful attempts - your account is locked \n");
-	attempt = 0;
-}*/
-/*
-int readFile(char users[MAX_USERS], char passes[MAX_USERS]){
-    FILE * fp;
-    char line[100];
-    char newLine = '\n';
-    if ((fp = fopen("data.txt, "rt")) == NULL){
-        return;
-    }
+int writeFile(char array[MAX_USERS][MAX_USER_LENGTH]){
+    FILE *f = fopen("data.txt", "wb");
+    fwrite(array, sizeof(char), sizeof(array), f);
+    fclose(f);
+    return 0;
 }
-*/
-int writeFile(int count, char users[MAX_USERS], char passes[MAX_USERS]){
-    char * newLine = '\n';
-    FILE * fp;
 
-    fp = fopen("data.txt", "w+");
-
-    while(count > -1){
-        puts("done\n");
-        fwrite(&users[userCount], sizeof(char), sizeof(strlen(users[userCount]))+1, fp);
-        fwrite(&newLine, sizeof(char), 2, fp);
-        fwrite(&passes[count], sizeof(char), sizeof(strlen(passes[count]))+1, fp);
-        fwrite(&newLine, sizeof(char), 2, fp);
-        count--;
-    }
-    fclose(fp);
+int readFile(char array[MAX_USERS][MAX_USER_LENGTH]){
+    FILE *f = fopen("data.txt", "rb");
+    fread(array, sizeof(char), sizeof(array), f);
     return 0;
 }
 //searches for username in table
-int searchData(const char * s, char users[MAX_USERS]){
+int searchUser(const char * s, char array[MAX_USERS][MAX_USER_LENGTH]){
     int i;
+
     for(i = 0; i < MAX_USERS; i++){
-        if(stricmp(s,users[i]) == 0){
+        if(stricmp(s,array[i]) == 0){
             puts("Username found");
             return i;
         } else {
@@ -136,8 +40,21 @@ int searchData(const char * s, char users[MAX_USERS]){
             return -1;
         }
     }
+    return 0;
 }
 
+int searchFile(const char * c, char array[MAX_USERS][MAX_USER_LENGTH]){
+    const char * temp = array;
+
+    if( (strstr(c, temp)) == NULL){
+        printf("Not found!\n");
+        return -1;
+    } else {
+        printf("Found!");
+        return 0;
+    }
+return 0;
+}
 // DES replacement cipher
 // The function E takes 4 bytes from *in as input and
 // writes 4 bytes to *out
@@ -176,14 +93,15 @@ char * getUserID(void){
     fgets(user, MAX_USER_LENGTH, stdin);
         user[strlen(user) - 1] = '\0';
         n = strlen(user);
+
     //User id’s must be at least 4 characters,
     //but less than 32 characters long.
         if (n < MIN_USER_LENGTH){
             printf("Username must be 4 to 31 characters long!\n");
+            return 0;
         } else {
             return user;
         }
-    return user;
 }
 
 //gets password and returns it
@@ -200,9 +118,8 @@ char * getPassword(void){
     //passwords must be at least 1 character long
     if (n < MIN_PASS_LENGTH){
         printf("Password must be 1-12 characters long!\n");
-        return "fail";
+        return 0;
     } else {
         return pass;
     }
-    return pass;
 }
