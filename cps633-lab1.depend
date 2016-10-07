@@ -41,14 +41,14 @@
 	<string.h>
 	<ctype.h>
 
-1475717698 source:c:\lab1-master\main.c
+1475773676 source:c:\lab1-master\main.c
 	<stdlib.h>
 	<stdio.h>
 	"olmHash.h"
 
-1475783042 c:\lab1-master\olmhash.h
+1475816565 c:\lab1-master\olmhash.h
 
-1475783544 source:c:\lab1-master\olmhash.c
+1475817574 source:c:\lab1-master\olmhash.c
 	"olmHash.h"
 	<stdlib.h>
 	<stdio.h>

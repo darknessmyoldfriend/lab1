@@ -13,14 +13,14 @@ char * getUserID(void);
 
 char * getPassword(void);
 
-char * getHash(int x, char * pass);
+char * getHash(char * pass);
 
-int writeFile(int i, char array[MAX_USERS][MAX_USER_LENGTH]);
+int writeFile(char * input);
 
 int readFile(char array[MAX_USERS][MAX_USER_LENGTH]);
 
 int searchUser(const char * s, char usernames[MAX_USERS][MAX_USER_LENGTH]);
 
-int searchFile(char * c, char array[MAX_USERS][MAX_USER_LENGTH]);
+int searchFile(char * input);
 
 void E(char *in, char *out);
