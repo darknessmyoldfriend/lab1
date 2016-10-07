@@ -4,77 +4,75 @@
 #include <string.h>
 #include <ctype.h>
 
-char users[MAX_USERS][MAX_USER_LENGTH];
-char passes[MAX_USERS][MAX_PASS_LENGTH];
+char * username;
+char * password;
 int userCount = 0;
 
 int olmHash(void){
-    char * temp = getUserID();
-    int in = searchFile(temp,users);
 
-    //if not found, return -1.
-    if(in != 0){
-        printf("%i\n", in);
-        puts("cool!\n");
-    } else {
-        printf("%i\n", in);
-        puts("not cool! save it to file\n");
-        strcpy(users[userCount],temp);
-        writeFile(userCount,users);
-        puts("file saved!\n");
-        return -1;
-    }
-    return 0;
-}
-
-int writeFile(int i, char array[MAX_USERS][MAX_USER_LENGTH]){
-    FILE *f = fopen("data.txt", "ab");
-    fwrite(array[i], sizeof(char), sizeof(array[i]), f);
-    fprintf(f, "\n");
-    fclose(f);
-    return 0;
-}
-
-//int readFile(char array[MAX_USERS][MAX_USER_LENGTH]){
-//    FILE *f = fopen("data.txt", "rb");
-//    fread(array, sizeof(char), sizeof(array), f);
-//    return 0;
-//}
-//searches for username in table
-int searchUser(const char * c, char array[MAX_USERS][MAX_USER_LENGTH]){
-    int i;
-    for(i = 0; i < MAX_USERS; i++){
-        if(stricmp(c,array[i]) == 0){
-            puts("Username found");
-            return i;
-        } else {
-            puts("Username not found. Creating new username.\n");
-            return -1;
+    //if old user is found, ask for password and match
+    char * input = getUserID();
+    if(searchFile(input) == 0){
+        //Old user
+        puts("You will enter your old password.\n");
+        if(searchFile(getHash(getPassword())) != 0){
+            puts("Increase attempts.\n");
         }
+    } else {
+        //New user
+        writeFile(input);
+        printf("Username written to file.\nYou will create a new password.\n");
+        char * pass = getHash(getPassword());
+        writeFile(pass);
+        writeFile("\n");
+        printf("Password written to file. Run again to input more.\n");
     }
     return 0;
 }
 
-int searchFile(char * c, char array[MAX_USERS][MAX_USER_LENGTH]){
-    FILE *fp;
-    fp = fopen("data.txt", "rb");
-    while(fgets(c, sizeof(array), fp) != NULL){
-        puts("found!\n");
-        return -1;
-    }
-    /*
-    const char * temp = array;
-
-    if((strstr(c, temp)) == NULL){
-        printf("Not found!\n");
-        return -1;
-    } else {
-        printf("Found!");
+int writeFile(char * input){
+    FILE *fp = fopen("data.txt", "ab");
+    if (fp != NULL){
+        fprintf(fp, "%s", input);
+        fclose(fp);
         return 0;
+    } else {
+        puts("Error: NSF\n");
+        fclose(fp);
+        return -1;
     }
-    */
-    puts("not found!\n");
     return 0;
+}
+
+int searchFile(char * input) {
+	FILE *fp;
+
+	int line_num = 1;
+	int find_result = 0;
+	char temp[MAX_USER_LENGTH];
+
+	if((fp = fopen("data.txt", "rb")) == NULL) {
+		return -1;
+	}
+
+	while(fgets(temp, MAX_USER_LENGTH, fp) != NULL) {
+		if((strstr(temp, input)) != NULL) {
+			puts("Input found in file!\n");
+			return 0;
+		}
+		line_num++;
+	}
+
+	if(find_result == 0) {
+		printf("\nSorry, couldn't find a match.\n");
+		return -1;
+	}
+
+	//Close the file if still open.
+	if(fp) {
+		fclose(fp);
+	}
+   	return 0;
 }
 // DES replacement cipher
 // The function E takes 4 bytes from *in as input and
@@ -93,13 +91,12 @@ void E(char *in, char *out){
 }
 
 //converts password to hash
-char * getHash(int x, char * pass){
+char * getHash(char * pass){
     char * hash = (char*)calloc(MAX_PASS_LENGTH, sizeof(char));
-    //getUpper(0,&*pass);
-	int j;
-	for(j=0; j<x; j++){ //pass char to E to hashify
-
-       E(&pass[4*j],&hash[4*j]);
+    int passLength = strlen(pass);
+    int i;
+	for(i = 0; i < passLength+1; i++){ //pass char to E to hashify
+       E(&pass[4*i],&hash[4*i]);
 	}
    	return hash;
 }
