@@ -9,23 +9,33 @@ char * password;
 int userCount = 0;
 
 int olmHash(void){
-
     //if old user is found, ask for password and match
-    char * input = getUserID();
-    if(searchFile(input) == 0){
-        //Old user
+    int attempts = 0;
+    while(attempts < 3){
+        char * input = getUserID();
+        if(searchFile(input) == 0){
+            //Old user
         puts("You will enter your old password.\n");
         if(searchFile(getHash(getPassword())) != 0){
             puts("Increase attempts.\n");
         }
+        puts("Create a new password:\n");
+        char * replacedPass = getHash(getPassword());
+        writeFile("\n");
+        writeFile(input);
+        writeFile(replacedPass);
+        writeFile("\n");
+        printf("Password written to file. Run again to input more.\n");
     } else {
         //New user
         writeFile(input);
         printf("Username written to file.\nYou will create a new password.\n");
-        char * pass = getHash(getPassword());
-        writeFile(pass);
+        char * newPass = getHash(getPassword());
+        writeFile(newPass);
         writeFile("\n");
         printf("Password written to file. Run again to input more.\n");
+    }
+
     }
     return 0;
 }
@@ -95,7 +105,7 @@ char * getHash(char * pass){
     char * hash = (char*)calloc(MAX_PASS_LENGTH, sizeof(char));
     int passLength = strlen(pass);
     int i;
-	for(i = 0; i < passLength+1; i++){ //pass char to E to hashify
+	for(i = 0; i < passLength/4; i++){ //pass char to E to hashify
        E(&pass[4*i],&hash[4*i]);
 	}
    	return hash;
@@ -140,4 +150,5 @@ char * getPassword(void){
     } else {
         return pass;
     }
+    return 0;
 }
