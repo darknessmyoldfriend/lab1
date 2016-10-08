@@ -5,7 +5,8 @@
 
 //handles prompt and sends var to olmHash.c
 int main(void){
-    olmHash();
+    crAuth();
+    //olmHash();
     return 0;
     //code
 }

@@ -55,3 +55,20 @@
 	<string.h>
 	<ctype.h>
 
+1475895270 source:c:\users\keith\desktop\lab1-master\main.c
+	<stdlib.h>
+	<stdio.h>
+	"olmHash.h"
+
+1475807036 c:\users\keith\desktop\lab1-master\olmhash.h
+
+1475895364 source:c:\users\keith\desktop\lab1-master\olmhash.c
+	"olmHash.h"
+	<stdlib.h>
+	<stdio.h>
+	<string.h>
+	<ctype.h>
+
+1475895288 source:c:\users\keith\desktop\lab1-master\crauth.c
+	"olmHash.h"
+
