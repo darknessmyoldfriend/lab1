@@ -1,5 +1,4 @@
 #define ATTEMPT_MAX 3 //Define a user-defined security parameter n
-#define MAX_IDS 20 //max users in table
 #define MAX_TABLE_SIZE 400
 #define MAX_USERS 20
 #define MIN_USER_LENGTH 4
@@ -17,7 +16,7 @@ char * getHash(char * pass);
 
 int writeFile(char * input);
 
-int readFile(char array[MAX_USERS][MAX_USER_LENGTH]);
+int readFile(char user[MAX_USERS][MAX_USER_LENGTH+MAX_PASS_LENGTH+1]);
 
 int searchUser(const char * s, char usernames[MAX_USERS][MAX_USER_LENGTH]);
 

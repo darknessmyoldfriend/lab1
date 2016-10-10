@@ -1,8 +1,9 @@
-#include "olmHash.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
+
+#include "olmHash.h"
 
 char * username;
 char * password;
@@ -11,7 +12,7 @@ int userCount = 0;
 int olmHash(void){
     //if old user is found, ask for password and match
     int attempts = 0;
-    while(attempts < 3){
+    while(attempts < ATTEMPT_MAX){
         char * input = getUserID();
         if(searchFile(input) == 0){
             //Old user
@@ -26,7 +27,7 @@ int olmHash(void){
         writeFile(replacedPass);
         writeFile("\n");
         printf("Password written to file. Run again to input more.\n");
-    } else {
+        } else {
         //New user
         writeFile(input);
         printf("Username written to file.\nYou will create a new password.\n");
@@ -34,8 +35,8 @@ int olmHash(void){
         writeFile(newPass);
         writeFile("\n");
         printf("Password written to file. Run again to input more.\n");
-    }
-
+        return 0;
+        }
     }
     return 0;
 }
@@ -68,6 +69,7 @@ int searchFile(char * input) {
 	while(fgets(temp, MAX_USER_LENGTH, fp) != NULL) {
 		if((strstr(temp, input)) != NULL) {
 			puts("Input found in file!\n");
+			find_result++;
 			return 0;
 		}
 		line_num++;
@@ -118,7 +120,7 @@ char * getUserID(void){
 
     printf("Enter your username: ");
     // the program asks the user to enter a new password
-    fgets(user, MAX_USER_LENGTH, stdin);
+    scanf("%s", user);
         user[strlen(user) - 1] = '\0';
         n = strlen(user);
 
@@ -140,7 +142,7 @@ char * getPassword(void){
 
     printf("Enter your password: ");
     // the program asks the user to enter a new password
-    fgets(pass, MAX_PASS_LENGTH, stdin);
+    scanf("%s", pass);
     pass[strlen(pass) - 1] = '\0';
     n = strlen(pass);
     //passwords must be at least 1 character long
@@ -151,4 +153,22 @@ char * getPassword(void){
         return pass;
     }
     return 0;
+}
+
+int readFile(char user[MAX_USERS][MAX_USER_LENGTH+MAX_PASS_LENGTH+1]){
+    FILE *fp = fopen("data.txt", "r");
+    int count = 0;
+    char * string = (char*)calloc(MAX_USER_LENGTH, sizeof(char));
+    char line[MAX_USER_LENGTH+MAX_PASS_LENGTH+1];
+
+    fp = fopen("data.txt", "r");
+
+    while (fgets(line, MAX_USER_LENGTH+MAX_PASS_LENGTH, fp) != NULL){
+        sscanf(line, "%s", string);
+        strncpy(user[count], string, MAX_USER_LENGTH+MAX_PASS_LENGTH+1);
+        printf("%s", user[count]);
+        count++;
+    }
+    fclose(fp);
+    return count;
 }

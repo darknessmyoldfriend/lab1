@@ -1,28 +1,69 @@
+#include "crAuth.h"
 #include "olmHash.h"
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+
+char dataArray[MAX_USERS][MAX_USER_LENGTH+MAX_PASS_LENGTH+1];
+
 int crAuth(void){
-    char * username = getUserID();
-    char * password = getHash(getPassword());
-    int xor = getXOR(username, password);
+    int random = rand();
+    printf("Random number: %i\n", random);
+    //if old user is found, ask for password and match
+    char * input = getUserID();
+    char * password = getXOR( (getHash(getPassword())), random);
 
-
+    if(searchFile(input) == 0){
+        //Old user
+        if( searchFile(password) != 0 ){
+            puts("Not authenticated.\n");
+        } else {
+            puts("Authenticated.\n");
+            return 0;
+        }
+    } else {
+        //New user
+        writeFile(input);
+        printf("Username written to file.\nYou will create a new password.\n");
+        char * newPass = password;
+        writeFile(newPass);
+        writeFile("\n");
+        printf("Password written to file. Run again to input more.\n");
+        return 0;
+    }
     return 0;
 }
 
-int getRandomNumber(void){
-    int x = rand() & 0xff;
-    x |= (rand() & 0xff) << 8;
-    x |= (rand() & 0xff) << 16;
-    x |= (rand() & 0xff) << 24;
-    return x;
+//xor the hash with the server's random number
+char * getXOR(char * hash, int r){
+	char * output = (char*)calloc(MAX_PASS_LENGTH, sizeof(char));
+	R(hash, output, r);
+	R(&hash[4], &output[4], r);
+	R(&hash[8], &output[8], r);
+	return output;
 }
 
-void R(char* input, char* output, int r)
-{
-	output[3] = input[3] ^ (r & 255); //xor the first byte with r's first byte
-	r = r >> 8; //shift r by one byte
-	output[2] = input[2] ^ (r & 255);
-	r = r >> 8;
-	output[1] = input[1] ^ (r & 255);
-	r = r >> 8;
-	output[0] = input[0] ^ (r & 255);
+
+void R(char* in, char* out, int r){
+	out[3] = in[3] ^ (r & 255); //xor the first byte with r's first byte
+	r = r >> SHIFT; //shift r by one byte
+	out[2] = in[2] ^ (r & 255);
+	r = r >> SHIFT;
+	out[1] = in[1] ^ (r & 255);
+	r = r >> SHIFT;
+	out[0] = in[0] ^ (r & 255);
 }
+
+//converts password to hash
+char * getCRAuthHash(char * pass){
+    char * hash = (char*)calloc(MAX_PASS_LENGTH, sizeof(char));
+    int passLength = strlen(pass);
+    int i;
+	for(i = 0; i < passLength+1; i++){ //pass char to E to hashify
+       E(&pass[4*i],&hash[4*i]);
+	}
+   	return hash;
+}
+
+
