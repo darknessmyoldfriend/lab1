@@ -68,7 +68,7 @@ int searchFile(char * input) {
 
 	while(fgets(temp, MAX_USER_LENGTH, fp) != NULL) {
 		if((strstr(temp, input)) != NULL) {
-			puts("Input found in file!\n");
+			//puts("Input found in file!\n");
 			find_result++;
 			return 0;
 		}

@@ -46,8 +46,8 @@ char * getXOR(char * hash, int r){
 
 
 void R(char* in, char* out, int r){
-	out[3] = in[3] ^ (r & 255); //xor the first byte with r's first byte
-	r = r >> SHIFT; //shift r by one byte
+	out[3] = in[3] ^ (r & 255); //XOR
+	r = r >> SHIFT;
 	out[2] = in[2] ^ (r & 255);
 	r = r >> SHIFT;
 	out[1] = in[1] ^ (r & 255);
@@ -60,7 +60,7 @@ char * getCRAuthHash(char * pass){
     char * hash = (char*)calloc(MAX_PASS_LENGTH, sizeof(char));
     int passLength = strlen(pass);
     int i;
-	for(i = 0; i < passLength+1; i++){ //pass char to E to hashify
+	for(i = 0; i < passLength+1; i++){ //pass char to E to getHash
        E(&pass[4*i],&hash[4*i]);
 	}
    	return hash;

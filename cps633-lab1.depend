@@ -41,7 +41,7 @@
 	<string.h>
 	<ctype.h>
 
-1476122997 source:c:\lab1-master\main.c
+1476154787 source:c:\lab1-master\main.c
 	<stdlib.h>
 	<stdio.h>
 	"olmHash.h"
@@ -49,14 +49,14 @@
 
 1476115005 c:\lab1-master\olmhash.h
 
-1476115077 source:c:\lab1-master\olmhash.c
+1476154567 source:c:\lab1-master\olmhash.c
 	<stdlib.h>
 	<stdio.h>
 	<string.h>
 	<ctype.h>
 	"olmHash.h"
 
-1476116773 source:c:\lab1-master\crauth.c
+1476154525 source:c:\lab1-master\crauth.c
 	"crAuth.h"
 	"olmHash.h"
 	<stdlib.h>
@@ -64,11 +64,11 @@
 	<string.h>
 	<ctype.h>
 
-1476115027 c:\lab1-master\crauth.h
+1476154797 c:\lab1-master\crauth.h
 
-1476122917 source:c:\lab1-master\opass.c
+1476154722 source:c:\lab1-master\opass.c
 	"olmHash.h"
 	"oPass.h"
 
-1476122021 c:\lab1-master\opass.h
+1476154890 c:\lab1-master\opass.h
 

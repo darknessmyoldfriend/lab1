@@ -13,16 +13,14 @@ int oPass(void){
         puts("Enter hashed password:");
         scanf("%10s", input);
         char c;
-
         do {
             c = getchar();
         } while (c != '\n' && c != '\0');
-
         int result = 0;
         int i;
         for(i = 0; i < TABLE_LENGTH; i++){
             if( strcmp(hashes[i],input) == 0 ){
-                printf("The real password is: %s\n", passes[i]);
+                printf("Unhashed password: %s\n", passes[i]);
                 result++;
                 break;
             }
@@ -33,6 +31,7 @@ int oPass(void){
     }
 	return 0;
 }
+
 int tableLine = 0;
 //populates all hashes for every possible password
 void recurse(char * pass, int index, int max){

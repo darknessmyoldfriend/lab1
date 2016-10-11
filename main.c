@@ -4,10 +4,10 @@
 #include "olmHash.h"
 #include "crAuth.h"
 
-//driver for parts of project
+//driver for project
 int main(void){
     int user = 0;
-    puts("MENU:\nEnter 1 for part 1.\nEnter 2 for part 2.\nEnter 3 for part 3.\nEnter any other number to quit.\n");
+    puts("MENU:\nEnter 1 for part 1.\nEnter 2 for part 2.\nEnter 3 for part 3.\nEnter any other character to quit.\n");
     scanf("%d", &user);
     if(user == 1){
         olmHash();
@@ -19,7 +19,6 @@ int main(void){
         oPass();
         return 0;
     } else {
-        printf("See you later.\n");
         return 0;
     }
     return 0;
